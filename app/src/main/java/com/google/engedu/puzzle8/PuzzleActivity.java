@@ -18,10 +18,12 @@ package com.google.engedu.puzzle8;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 
@@ -67,10 +69,25 @@ public class PuzzleActivity extends AppCompatActivity {
     }
 
     public void dispatchTakePictureIntent(View view) {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        setContentView(R.layout.activity_puzzle);
+        Bundle bundle = data.getExtras();
+        Bitmap imageBitmap = (Bitmap) bundle.get("data");
+        ImageView imageView = new ImageView(getBaseContext());
+        imageView.setImageBitmap(imageBitmap);
+        RelativeLayout prl = findViewById(R.id.puzzle_container);
+        RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT);
+        imageView.setLayoutParams(rlp);
+        prl.addView(imageView);
     }
 
     public void shuffleImage(View view) {
