@@ -32,6 +32,7 @@ public class PuzzleActivity extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private Bitmap imageBitmap = null;
     private PuzzleBoardView boardView;
+    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +81,10 @@ public class PuzzleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_puzzle);
         Bundle bundle = data.getExtras();
         Bitmap imageBitmap = (Bitmap) bundle.get("data");
-        ImageView imageView = new ImageView(getBaseContext());
+
+        /*
+        // For testing only: display the picture bitmap:
+        imageView = new ImageView(getBaseContext());
         imageView.setImageBitmap(imageBitmap);
         RelativeLayout prl = findViewById(R.id.puzzle_container);
         RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams(
@@ -88,6 +92,10 @@ public class PuzzleActivity extends AppCompatActivity {
                 RelativeLayout.LayoutParams.MATCH_PARENT);
         imageView.setLayoutParams(rlp);
         prl.addView(imageView);
+        */
+
+        boardView.initialize(imageBitmap);
+        // boardView.invalidate();
     }
 
     public void shuffleImage(View view) {
@@ -96,6 +104,5 @@ public class PuzzleActivity extends AppCompatActivity {
 
     public void solve(View view) {
       boardView.solve();
-
     }
 }

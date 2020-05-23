@@ -20,6 +20,9 @@ import android.graphics.Canvas;
 
 import java.util.ArrayList;
 
+import static android.graphics.Bitmap.createBitmap;
+import static android.graphics.Bitmap.createScaledBitmap;
+
 
 public class PuzzleBoard {
 
@@ -33,6 +36,21 @@ public class PuzzleBoard {
     private ArrayList<PuzzleTile> tiles;
 
     PuzzleBoard(Bitmap bitmap, int parentWidth) {
+        tiles = new ArrayList<>();
+        int boardSizeInTiles = (int) Math.sqrt(NUM_TILES + 1);
+        for (int idx = 0; idx < NUM_TILES; ++idx) {
+            int tileRow = idx / boardSizeInTiles;
+            int tileCol = idx % boardSizeInTiles;
+            int bitmapWidth = bitmap.getWidth();
+            int bitmapHeight = bitmap.getHeight();
+            int bitmapTileWidth = bitmapWidth / boardSizeInTiles;
+            int bitmapTileHeight = bitmapHeight / boardSizeInTiles;
+            Bitmap chunkImage = createBitmap(bitmap, tileCol * bitmapTileWidth, tileRow * bitmapTileHeight, bitmapTileWidth, bitmapTileHeight);
+            int parentHeight = (int) (double)parentWidth*(bitmapHeight/bitmapWidth);
+            Bitmap scaledChunkImage = createScaledBitmap(chunkImage, parentWidth / boardSizeInTiles, parentHeight / boardSizeInTiles, false);
+            PuzzleTile tile = new PuzzleTile(scaledChunkImage, idx);
+            tiles.add(tile);
+        }
     }
 
     PuzzleBoard(PuzzleBoard otherBoard) {
